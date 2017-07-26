@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Default suite">
+
+	<test verbose="2" name="MultithreadServerNullTest" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerNullTest"></class> 
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestAddBookDescription" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestAddBookDescription"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestActivateUser" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestActivateUser"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestBanUser" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestBanUser"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestDisableBook" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestDisableBook"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="singlecommand.MultithreadServerTestEditBookInfo" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestEditBookInfo"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestEditProfile" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestEditProfile"></class>
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="MultithreadServerTestSignIn" parallel="methods" thread-count="4">
+
+		<classes>
+			<class name="com.epam.ta.library.server.singlecommand.MultithreadServerTestSignIn"></class>
+		</classes>
+
+	</test>
+</suite>
+

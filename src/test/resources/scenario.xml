@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Default suite">
+
+	<test verbose="2" name="admin_scenario1" parallel="methods" thread-count="2">
+
+		<classes>
+ 			<class name="com.epam.ta.library.server.scenario.MultithreadServerAdminScenario1"></class> 
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="admin_scenario2" parallel="methods" thread-count="2">
+
+		<classes>
+			<class name="com.epam.ta.library.server.scenario.MultithreadServerAdminScenario2"></class> 
+		</classes>
+
+	</test>
+	
+	<test verbose="2" name="user_scenario" parallel="methods" thread-count="3">
+
+		<classes>
+			<class name="com.epam.ta.library.server.scenario.MultithreadServerUserScenario"></class> 
+		</classes>
+
+	</test>
+</suite>
