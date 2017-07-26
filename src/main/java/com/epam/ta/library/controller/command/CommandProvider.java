@@ -5,24 +5,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.epam.ta.library.controller.command.impl.AccessDenied;
-import com.epam.ta.library.controller.command.impl.ActivateUser;
-import com.epam.ta.library.controller.command.impl.AddBookDescription;
-import com.epam.ta.library.controller.command.impl.BanUser;
-import com.epam.ta.library.controller.command.impl.DisableBook;
-import com.epam.ta.library.controller.command.impl.EditBookInfo;
-import com.epam.ta.library.controller.command.impl.EditProfile;
-import com.epam.ta.library.controller.command.impl.GrantAdmin;
-import com.epam.ta.library.controller.command.impl.MarkBookReturned;
-import com.epam.ta.library.controller.command.impl.OrderBook;
-import com.epam.ta.library.controller.command.impl.RefuseBook;
-import com.epam.ta.library.controller.command.impl.Register;
-import com.epam.ta.library.controller.command.impl.RemoveAdmin;
-import com.epam.ta.library.controller.command.impl.SeeAllBooks;
-import com.epam.ta.library.controller.command.impl.SeeProfile;
-import com.epam.ta.library.controller.command.impl.SignIn;
-import com.epam.ta.library.controller.command.impl.SignOut;
-import com.epam.ta.library.controller.command.impl.WrongRequest;
+import com.epam.ta.library.controller.command.parsing.exception.XMLParserException;
+import com.epam.ta.library.controller.command.parsing.exception.XMLSAXParserException;
+import com.epam.ta.library.controller.command.parsing.parser.ParserFactory;
+import com.epam.ta.library.controller.command.parsing.parser.XMLParserRunner;
+import com.epam.ta.library.controller.command.parsing.parser.ParserFactory.ParserType;
 import com.epam.ta.library.controller.session.SessionStorage;
 
 public class CommandProvider {
@@ -31,33 +18,33 @@ public class CommandProvider {
 
 	private final static Logger log = Logger.getLogger(CommandProvider.class);
 
+	public final String XML_COMMAND_FILE = "Command.xml";
+	public final String ERROR_XML_PARSE = "Error received during parsing xml file. Command repository now empty.";
+
 	public CommandProvider() {
-		repository.put(CommandName.ACTIVATE_USER, new ActivateUser());
-		repository.put(CommandName.ADD_BOOK_DESCRIPTION, new AddBookDescription());
-		repository.put(CommandName.AUTHORIZATION, new SignIn());
-		repository.put(CommandName.SIGN_OUT, new SignOut());
-		repository.put(CommandName.BAN_USER, new BanUser());
-		repository.put(CommandName.DISABLE_BOOK, new DisableBook());
-		repository.put(CommandName.EDIT_BOOK_INFO, new EditBookInfo());
-		repository.put(CommandName.EDIT_PROFILE, new EditProfile());
-		repository.put(CommandName.GRANT_ADMIN, new GrantAdmin());
-		repository.put(CommandName.MARK_BOOK_RETURNED, new MarkBookReturned());
-		repository.put(CommandName.ORDER_BOOK, new OrderBook());
-		repository.put(CommandName.REFUSE_BOOK, new RefuseBook());
-		repository.put(CommandName.REGISTRATION, new Register());
-		repository.put(CommandName.REMOVE_ADMIN, new RemoveAdmin());
-		repository.put(CommandName.REMOVE_BAN, new ActivateUser());
-		repository.put(CommandName.SEE_ALL_BOOKS, new SeeAllBooks());
-		repository.put(CommandName.SEE_PROFILE, new SeeProfile());
-		repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
-		repository.put(CommandName.ACCESS_DINIED, new AccessDenied());
+
+		try {
+			ParserFactory parserFactory = ParserFactory.getInstance();
+			repository.putAll(parserFactory.getParser(ParserType.DOM).runParser(XML_COMMAND_FILE));
+			System.out.println();
+		} catch (XMLParserException e) {
+			log.error(ERROR_XML_PARSE + e);
+		} catch (Exception e) {
+			log.error(ERROR_XML_PARSE + e);
+		}
 	}
 
 	public Command getCommand(String commandString) {
-		
+
 		CommandName commandName = null;
 		Command command = null;
 		SessionStorage session = null;
+		XMLParserRunner xmlCommandExtractor = new XMLParserRunner();
+		try {
+			xmlCommandExtractor.runSAXParser();
+		} catch (XMLSAXParserException e) {
+			log.error(e);
+		}
 		try {
 			commandName = CommandName.valueOf(commandString.toUpperCase());
 			session = SessionStorage.getInstance();

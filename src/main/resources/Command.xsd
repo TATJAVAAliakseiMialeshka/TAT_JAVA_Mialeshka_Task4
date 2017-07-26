@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.epam.ta.xml/command"
+ xmlns:tns="http://com.epam.ta.xml/command">
+ 
+ 	<element name="commands">
+		<complexType>
+			<sequence>
+				<element name="command" type="tns:command" minOccurs="1"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="command">
+		<sequence>
+			<element name="name" type="tns:name" maxOccurs="1" />
+			<element name="class" type="tns:class" maxOccurs="1" />
+<!-- 			<element name="params" type="tns:params"  minOccurs="0" maxOccurs="1" />
+ -->		</sequence>
+		<attribute name="authority" type="tns:authority"/>
+	</complexType>		
+	
+	<complexType name="params">
+		<all>
+		<element name="user_id" type="tns:user_id" minOccurs="0" maxOccurs="1"></element>
+		<element name="user_name" type="tns:user_name" minOccurs="0" maxOccurs="1"></element>
+		<element name="user_pass" type="tns:user_pass" minOccurs="0" maxOccurs="1"></element>
+		<element name="user_old_pass" type="tns:user_old_pass" minOccurs="0" maxOccurs="1"></element>
+		<element name="book_id" type="tns:book_id" minOccurs="0" maxOccurs="1"></element>
+		<element name="book_name" type="tns:book_name" minOccurs="0" maxOccurs="1"></element>
+		<element name="book_descr" type="tns:book_descr" minOccurs="0" maxOccurs="1"></element>
+		<element name="book_year" type="tns:book_year" minOccurs="0" maxOccurs="1"></element>
+		<element name="book_quantity" type="tns:book_quantity" minOccurs="0" maxOccurs="1"></element>
+		</all>
+	</complexType>
+	
+	 	<simpleType name="user_id">
+			<restriction base="positiveInteger">
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="user_name">
+			<restriction base="string">
+			<pattern value = "[A-z0-9_-]+"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="user_pass">
+			<restriction base="string">
+			<pattern value = "[A-z0-9_$%&amp;*!#()&quot;&apos;]+"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="user_old_pass">
+			<restriction base="string">
+			<pattern value = "[A-z0-9_$%&amp;*!#()&quot;&apos;]+"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="book_id">
+			<restriction base="positiveInteger">
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="book_name">
+			<restriction base="string">
+				<pattern value = "[A-z0-9\\s\\.]+"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="book_descr">
+			<restriction base="string">
+				<pattern value = "[A-z0-9\\s\\.]+"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="book_year">
+			<restriction base="positiveInteger">
+				<pattern value = "[0-9]{3,4}"/>
+			</restriction>
+		</simpleType>
+		
+		<simpleType name="book_quantity">
+			<restriction base="nonNegativeInteger">
+			</restriction>
+		</simpleType>
+		
+		
+		
+ 	<simpleType name="name">
+		<restriction base="string">
+		<pattern value = "[A-Z_]+"/>
+			<enumeration value="REGISTRATION" />
+			<enumeration value="AUTHORIZATION" />
+			<enumeration value="SIGN_OUT" />
+			<enumeration value="SEE_PROFILE" />
+			<enumeration value="EDIT_PROFILE" />
+			<enumeration value="SEE_ALL_BOOKS" />
+			<enumeration value="ORDER_BOOK" />
+			<enumeration value="REFUSE_BOOK" />
+			<enumeration value="GRANT_ADMIN" />
+			<enumeration value="REMOVE_ADMIN" />
+			<enumeration value="ACTIVATE_USER" />
+			<enumeration value="BAN_USER" />
+			<enumeration value="REMOVE_BAN" />
+			<enumeration value="MARK_BOOK_RETURNED" />
+			<enumeration value="ADD_BOOK_DESCRIPTION" />
+			<enumeration value="EDIT_BOOK_INFO" />
+			<enumeration value="DISABLE_BOOK" />
+			<enumeration value="WRONG_REQUEST" />
+			<enumeration value="ACCESS_DINIED" />
+			</restriction>
+	</simpleType>
+	
+	<simpleType name="class">
+		<restriction base="string">
+		<pattern value = "[A-z]+"/>
+			<enumeration value="Register" />
+			<enumeration value="SignIn" />
+			<enumeration value="SignOut" />
+			<enumeration value="SeeProfile" />
+			<enumeration value="EditProfile" />
+			<enumeration value="SeeAllBooks" />
+			<enumeration value="OrderBook" />
+			<enumeration value="RefuseBook" />
+			<enumeration value="GrantAdmin" />
+			<enumeration value="RemoveAdmin" />
+			<enumeration value="ActivateUser" />
+			<enumeration value="BanUser" />
+			<enumeration value="RemoveBan" />
+			<enumeration value="MarkBookReturned" />
+			<enumeration value="AddBookDescription" />
+			<enumeration value="EditBookInfo" />
+			<enumeration value="DisableBook" />
+			<enumeration value="WrongRequest" />
+			<enumeration value="AccessDenied" />
+			</restriction>
+	</simpleType>
+	
+	 <simpleType name="authority">
+		<restriction base="string">
+		<pattern value = "[A-Z_]+"/>
+			<enumeration value="ROLE_SUPERADMIN" />
+			<enumeration value="ROLE_ADMIN" />
+			<enumeration value="ROLE_USER" />
+			<enumeration value="" />
+		</restriction>
+	</simpleType>
+	
+</schema>

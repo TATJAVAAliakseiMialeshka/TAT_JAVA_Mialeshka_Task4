@@ -17,10 +17,6 @@
 		  value="%m%n" />
 	    </layout>
 	</appender>
-	
-    <root>
-       <appender-ref ref="FileTxtAppender"/>
-    </root>
     
     <logger name="com.epam.ta.library.controller.Controller" additivity="true">
         <level value="debug"/>
@@ -31,5 +27,19 @@
         <level value="debug"/>
         <appender-ref ref="console_log"/>
     </logger>
+    
+     <logger name="com.epam.ta.library.marshalling.MarshallingRunner" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="FileTxtAppender"/>
+    </logger>
+    
+    <logger name="com.epam.ta.library.marshalling.MarshallingPerformer" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="console_log"/>
+    </logger>
+    	
+    <root>
+       <appender-ref ref="FileTxtAppender"/>
+    </root>
     
 </log4j:configuration>

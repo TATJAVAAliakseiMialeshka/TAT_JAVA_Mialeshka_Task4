@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:commands xmlns:tns="http://com.epam.ta.xml/command"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://com.epam.ta.xml/command Command.xsd">
+	
+	<command>
+		<name>REGISTRATION</name>
+		<class>Register</class>
+
+	</command>
+	
+	<command>
+		<name>AUTHORIZATION</name>
+		<class>SignIn</class>
+
+	</command>
+
+	<command>
+		<name>SIGN_OUT</name>
+		<class>SignOut</class>
+	</command>
+	
+	<command authority="ROLE_USER">
+		<name>SEE_PROFILE</name>
+		<class>SeeProfile</class>
+
+	</command>
+	
+	<command authority="ROLE_USER">
+		<name>SEE_ALL_BOOKS</name>
+		<class>SeeAllBooks</class>
+
+	</command>
+	
+	<command authority="ROLE_USER">
+		<name>ORDER_BOOK</name>
+		<class>OrderBook</class>
+
+	</command>
+	
+	<command authority="ROLE_USER">
+		<name>REFUSE_BOOK</name>
+		<class>RefuseBook</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>EDIT_PROFILE</name>
+		<class>EditProfile</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>GRANT_ADMIN</name>
+		<class>GrantAdmin</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>REMOVE_ADMIN</name>
+		<class>RemoveAdmin</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>ACTIVATE_USER</name>
+		<class>ActivateUser</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>BAN_USER</name>
+		<class>BanUser</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>REMOVE_BAN</name>
+		<class>ActivateUser</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>MARK_BOOK_RETURNED</name>
+		<class>MarkBookReturned</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>ADD_BOOK_DESCRIPTION</name>
+		<class>AddBookDescription</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>EDIT_BOOK_INFO</name>
+		<class>EditBookInfo</class>
+
+	</command>
+	
+	<command authority="ROLE_ADMIN">
+		<name>DISABLE_BOOK</name>
+		<class>DisableBook</class>
+
+	</command>
+	
+	<command>
+		<name>WRONG_REQUEST</name>
+		<class>WrongRequest</class>
+	</command>
+	
+	<command>
+		<name>ACCESS_DINIED</name>
+		<class>AccessDenied</class>
+	</command> 
+	
+</tns:commands>

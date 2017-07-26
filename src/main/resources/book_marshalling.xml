@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<books>
+    <book id="1">
+        <name>book1name</name>
+        <description>book1 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>2017</year>
+        <author>book1Author</author>
+    </book>
+    <book id="5">
+        <name>book4name</name>
+        <description>book4 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>1900</year>
+        <author>book4Author</author>
+    </book>
+    <book id="123">
+        <name>book34name</name>
+        <description>book34 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>1886</year>
+        <author>book34Author</author>
+    </book>
+    <book id="6">
+        <name>book3name</name>
+        <description>book3 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>998</year>
+        <author>book3Author</author>
+    </book>
+    <book id="2">
+        <name>book7name</name>
+        <description>book7 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>2004</year>
+        <author>book7Author</author>
+    </book>
+    <book id="345">
+        <name>book8name</name>
+        <description>book8 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>2010</year>
+        <author>book8Author</author>
+    </book>
+    <book id="7">
+        <name>book41name</name>
+        <description>book41 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>1998</year>
+        <author>book41Author</author>
+    </book>
+    <book id="4">
+        <name>book42name</name>
+        <description>book42 description</description>
+        <isAvailable>true</isAvailable>
+        <quantity>5</quantity>
+        <year>1817</year>
+        <author>book42Author</author>
+    </book>
+</books>
