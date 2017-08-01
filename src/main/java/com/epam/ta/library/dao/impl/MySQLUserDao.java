@@ -10,11 +10,12 @@ import java.util.List;
 import com.epam.ta.library.bean.Subscription;
 import com.epam.ta.library.bean.User;
 import com.epam.ta.library.dao.UserDao;
+import com.epam.ta.library.dao.connection.ConnectionClosable;
 import com.epam.ta.library.dao.exception.DaoException;
 import com.epam.ta.library.dao.factory.MySQLDao;
 import com.epam.ta.library.dao.util.UserUtil;
 
-public final class MySQLUserDao implements UserDao {
+public final class MySQLUserDao implements UserDao, ConnectionClosable {
 
 	private final static String SQL_ORDER_BOOK = "INSERT INTO subscriptions (u_id, b_id) values(?,?)";
 	private final static String SQL_UPDATE_BOOK_QUANTITY_DECREASE_AND_STATUS = "UPDATE books b set b.b_is_available = case when b.b_quantity = 1 then 'N' else b.b_is_available end , b.b_quantity=b.b_quantity-1 where b.b_id = ? and b.b_is_available='Y'";
@@ -25,10 +26,9 @@ public final class MySQLUserDao implements UserDao {
 	private final static String SQL_GET_USER_BY_ID = "select * from users where u_id = ?";
 
 	private static final String ERROR_DB_OPERATION_FAILED = "Database operation failed.";
-	private static final String ERROR_CLOSING_CONNECTION = "Failed to close database connection.";
 	private static final String ERROR_ROLLBACK = "Error during collection rollback";
 	private static final String ERROR_USER_NOT_FOUND = "User not found.";
-	
+
 	private final static int ZERO_AFFECTED_ROWS = 0;
 
 	private static MySQLUserDao instance = null;
@@ -59,7 +59,7 @@ public final class MySQLUserDao implements UserDao {
 			rs = stm.executeQuery();
 
 			subscriptions = new ArrayList<>();
-			
+
 			while (rs.next()) {
 				Subscription subscription = new Subscription();
 				subscription.setBookName(rs.getString(1));
@@ -72,15 +72,7 @@ public final class MySQLUserDao implements UserDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (rs != null || stm != null || conn != null) {
-				try {
-					rs.close();
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(rs, stm, conn);
 		}
 		return subscriptions;
 	}
@@ -121,15 +113,9 @@ public final class MySQLUserDao implements UserDao {
 			}
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 		} finally {
-			if (stmOrderBook != null || stmAndDecreaseBooksCount != null || conn != null) {
-				try {
-					stmOrderBook.close();
-					stmAndDecreaseBooksCount.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closePreparedStatement(stmOrderBook);
+			closePreparedStatement(stmAndDecreaseBooksCount);
+			closeConnection(conn);
 		}
 		return false;
 	}
@@ -169,15 +155,9 @@ public final class MySQLUserDao implements UserDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stmRefuseOrderedBook != null || stmAndIncreaseBooksCount != null || conn != null) {
-				try {
-					stmRefuseOrderedBook.close();
-					stmAndIncreaseBooksCount.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closePreparedStatement(stmRefuseOrderedBook);
+			closePreparedStatement(stmAndIncreaseBooksCount);
+			closeConnection(conn);
 		}
 		return true;
 	}
@@ -202,14 +182,7 @@ public final class MySQLUserDao implements UserDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (rs != null || stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(rs, stm, conn);
 		}
 		return user;
 	}
@@ -233,14 +206,7 @@ public final class MySQLUserDao implements UserDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}

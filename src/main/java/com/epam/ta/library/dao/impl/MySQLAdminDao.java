@@ -13,11 +13,11 @@ import java.util.ListIterator;
 import com.epam.ta.library.bean.Book;
 import com.epam.ta.library.bean.Subscription;
 import com.epam.ta.library.dao.AdminDao;
+import com.epam.ta.library.dao.connection.ConnectionClosable;
 import com.epam.ta.library.dao.exception.DaoException;
 import com.epam.ta.library.dao.factory.MySQLDao;
 
-public final class MySQLAdminDao implements AdminDao {
-
+public final class MySQLAdminDao implements AdminDao, ConnectionClosable {
 
 	private static final String SQL_GET_BOOK_SUBSCRIPTIONS = "select sb_id, u_id, b_id, sb_start, sb_finish, sb_status from subscriptions where b_id=?";
 	private static final String SQL_ACTIVATE_SUBSCRIPTION = "update subscriptions sb set sb.sb_start = ?, sb.sb_finish = ?, sb.sb_status = 'S' where sb.u_id=?";
@@ -28,14 +28,13 @@ public final class MySQLAdminDao implements AdminDao {
 	private final static String SQL_UPDATE_BOOK_QUANTITY_INCREASE_AND_STATUS = "UPDATE books b set b.b_is_available = case when b.b_quantity = 0 then 'Y' else b.b_is_available end , b.b_quantity=b.b_quantity+1 where b.b_id = ?";
 
 	private static final String ERROR_DB_OPERATION_FAILED = "Database operation failed.";
-	private static final String ERROR_СLOSING_CONNECTION = "Failed to close database connection.";
 	private static final String ERROR_ROLLBACK = "Error during collection rollback";
-	
+
 	private final static int ZERO_AFFECTED_ROWS = 0;
 	private static final int SUBSCRIPTION_TIME = 30;
-	
+
 	private static MySQLAdminDao instance = null;
-	
+
 	private MySQLAdminDao() {
 		super();
 
@@ -79,15 +78,7 @@ public final class MySQLAdminDao implements AdminDao {
 				throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 			} finally {
-				if (rs != null || stm != null || conn != null) {
-					try {
-						rs.close();
-						stm.close();
-						conn.close();
-					} catch (SQLException ex) {
-						throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-					}
-				}
+				closeConnection(rs, stm, conn);
 			}
 			if (subscriptions.size() > 0) {
 				book.setSubscriptionList(subscriptions);
@@ -98,7 +89,7 @@ public final class MySQLAdminDao implements AdminDao {
 		return books;
 
 	}
-	
+
 	@Override
 	public boolean addUserRole(int userId, String authority) throws DaoException {
 		Connection conn = null;
@@ -109,8 +100,8 @@ public final class MySQLAdminDao implements AdminDao {
 			stm = conn.prepareStatement(SQL_ADD_USER_ROLE);
 			stm.setInt(1, userId);
 			stm.setString(2, authority);
-			
-			if(stm.executeUpdate()>ZERO_AFFECTED_ROWS){
+
+			if (stm.executeUpdate() > ZERO_AFFECTED_ROWS) {
 				return true;
 			}
 
@@ -118,18 +109,11 @@ public final class MySQLAdminDao implements AdminDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean deleteUserRole(int userId, String authority) throws DaoException {
 		Connection conn = null;
@@ -140,8 +124,8 @@ public final class MySQLAdminDao implements AdminDao {
 			stm = conn.prepareStatement(SQL_DELETE_USER_ROLE);
 			stm.setInt(1, userId);
 			stm.setString(2, authority);
-			
-			if(stm.executeUpdate()>ZERO_AFFECTED_ROWS){
+
+			if (stm.executeUpdate() > ZERO_AFFECTED_ROWS) {
 				return true;
 			}
 
@@ -149,20 +133,13 @@ public final class MySQLAdminDao implements AdminDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public boolean activateSubscription(int userId) throws DaoException { //activateUserSubscription
+	public boolean activateSubscription(int userId) throws DaoException { // activateUserSubscription
 		Connection conn = null;
 		PreparedStatement stm = null;
 
@@ -170,13 +147,13 @@ public final class MySQLAdminDao implements AdminDao {
 			conn = MySQLDao.createConnection();
 			stm = conn.prepareStatement(SQL_ACTIVATE_SUBSCRIPTION);
 
-			Calendar currentTime = Calendar.getInstance();	
-			
+			Calendar currentTime = Calendar.getInstance();
+
 			stm.setDate(1, convertDateToSQLFormat(currentTime));
 			currentTime.add(Calendar.DATE, SUBSCRIPTION_TIME);
 			stm.setDate(2, convertDateToSQLFormat(currentTime));
 			stm.setInt(3, userId);
-			if(stm.executeUpdate()>ZERO_AFFECTED_ROWS){
+			if (stm.executeUpdate() > ZERO_AFFECTED_ROWS) {
 				return true;
 			}
 
@@ -184,37 +161,30 @@ public final class MySQLAdminDao implements AdminDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public boolean receiveBookBack(int userId, int bookId) throws DaoException { //activateUserSubscription
+	public boolean receiveBookBack(int userId, int bookId) throws DaoException { // activateUserSubscription
 		Connection conn = null;
 		PreparedStatement subscriptionStm = null;
 		PreparedStatement stmAndIncreaseBooksCount = null;
-		
+
 		try {
 			conn = MySQLDao.createConnection();
 			conn.setAutoCommit(false);
-			subscriptionStm = conn.prepareStatement(SQL_END_SUBSCR,
-					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			subscriptionStm = conn.prepareStatement(SQL_END_SUBSCR, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
 
-			Calendar currentTime = Calendar.getInstance();	
-			
+			Calendar currentTime = Calendar.getInstance();
+
 			subscriptionStm.setDate(1, convertDateToSQLFormat(currentTime));
 			subscriptionStm.setInt(2, userId);
 			subscriptionStm.setInt(3, bookId);
 			subscriptionStm.addBatch();
-			
+
 			stmAndIncreaseBooksCount = conn.prepareStatement(SQL_UPDATE_BOOK_QUANTITY_INCREASE_AND_STATUS,
 					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			stmAndIncreaseBooksCount.setInt(1, bookId);
@@ -222,7 +192,7 @@ public final class MySQLAdminDao implements AdminDao {
 
 			int[] affectedSubscriptionRows = subscriptionStm.executeBatch();
 			int[] affectedBookRows = stmAndIncreaseBooksCount.executeBatch();
-			
+
 			if (affectedBookRows[0] > ZERO_AFFECTED_ROWS && affectedSubscriptionRows[0] > ZERO_AFFECTED_ROWS) {
 				conn.commit();
 				return true;
@@ -237,20 +207,13 @@ public final class MySQLAdminDao implements AdminDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (subscriptionStm != null || conn != null) {
-				try {
-					subscriptionStm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-				}
-			}
+			closePreparedStatement(subscriptionStm);
+			closePreparedStatement(stmAndIncreaseBooksCount);
+			closeConnection(conn);
 		}
 		return false;
 	}
-	
-	
-	
+
 	@Override
 	public boolean updateUserStatus(int userId, String status) throws DaoException {
 		Connection conn = null;
@@ -259,11 +222,11 @@ public final class MySQLAdminDao implements AdminDao {
 		try {
 			conn = MySQLDao.createConnection();
 			stm = conn.prepareStatement(SQL_UPDATE_USER_STATUS);
-			
+
 			stm.setString(1, status);
 			stm.setInt(2, userId);
-			
-			if(stm.executeUpdate()>ZERO_AFFECTED_ROWS){
+
+			if (stm.executeUpdate() > ZERO_AFFECTED_ROWS) {
 				return true;
 			}
 
@@ -271,20 +234,11 @@ public final class MySQLAdminDao implements AdminDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_СLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}
-	
-	
-	
+
 	private Date convertDateToSQLFormat(Calendar calendar) {
 
 		return new Date(calendar.getTime().getTime());

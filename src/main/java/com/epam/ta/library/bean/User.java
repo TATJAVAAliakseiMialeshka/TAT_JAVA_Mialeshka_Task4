@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Serializable{
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 2909440320052723746L;
-	
+
 	private Integer id;
 	private String name;
 	private String password;
@@ -44,27 +44,19 @@ public class User implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		if (null != id) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
 	public void setName(String name) {
-		if (null != name && !name.isEmpty()) {
-			this.name = name;
-		}
+		this.name = name;
 	}
 
 	public void setPassword(String password) {
-		if (null != password && !password.isEmpty()) {
-			this.password = password;
-		}
+		this.password = password;
 	}
 
 	public void setRoleList(List<Role> roleList) {
-		if (null != roleList) {
-			this.roleList = roleList;
-		}
+		this.roleList = roleList;
 	}
 
 	public void setStatus(String statusStr) {
@@ -79,9 +71,7 @@ public class User implements Serializable{
 	}
 
 	public void setSubscriptions(List<Subscription> subscriptions) {
-		if (null != subscriptions) {
-			this.subscriptions = subscriptions;
-		}
+		this.subscriptions = subscriptions;
 	}
 
 	@Override

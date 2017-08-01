@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Author implements Serializable{
+public class Author implements Serializable {
 
 	private static final long serialVersionUID = -6073658929164760617L;
-	
+
 	private Integer id;
 	private String name;
 	private List<Book> bookList = new ArrayList<>();
@@ -25,21 +25,15 @@ public class Author implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		if (null != id) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
 	public void setName(String name) {
-		if (null != name && !name.isEmpty()) {
-			this.name = name;
-		}
+		this.name = name;
 	}
 
 	public void setBookList(List<Book> bookList) {
-		if (null != bookList) {
-			this.bookList = bookList;
-		}
+		this.bookList = bookList;
 	}
 
 	@Override

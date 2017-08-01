@@ -3,10 +3,10 @@ package com.epam.ta.library.bean;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class Subscription implements Serializable{
+public class Subscription implements Serializable {
 
 	private static final long serialVersionUID = -5652380306813206701L;
-	
+
 	private Integer id;
 	private Integer userId;
 	private Integer bookId;
@@ -45,9 +45,7 @@ public class Subscription implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		if (null != id) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
 	public void setUserId(Integer userId) {
@@ -59,15 +57,11 @@ public class Subscription implements Serializable{
 	};
 
 	public void setStartDate(Date startDate) {
-		if (null != startDate) {
-			this.startDate = startDate;
-		}
+		this.startDate = startDate;
 	}
 
 	public void setEndDate(Date endDate) {
-		if (null != endDate) {
-			this.endDate = endDate;
-		}
+		this.endDate = endDate;
 	}
 
 	public void setStatus(String statusStr) {
@@ -86,9 +80,7 @@ public class Subscription implements Serializable{
 	}
 
 	public void setBookName(String bookName) {
-		if (null != bookName && !bookName.isEmpty()) {
-			this.bookName = bookName;
-		}
+		this.bookName = bookName;
 	}
 
 	@Override

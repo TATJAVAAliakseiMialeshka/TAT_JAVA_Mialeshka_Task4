@@ -35,14 +35,12 @@ public class JaxbMarshaller {
 			m.marshal(marshObject, new FileOutputStream(xmlFilePath));
 			resultXMLFile = new File(xmlFilePath);
 
-			return resultXMLFile;
-
 		} catch (FileNotFoundException e) {
 			throw new MarshallingException(ERR_XML_NOT_FOUND, e);
 		} catch (JAXBException e) {
 			throw new MarshallingException(ERR_MARSH, e);
 		}
-
+		return resultXMLFile;
 	}
 
 }

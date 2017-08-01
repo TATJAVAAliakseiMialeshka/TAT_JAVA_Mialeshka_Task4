@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import com.epam.ta.library.bean.User;
 import com.epam.ta.library.dao.LoginDao;
+import com.epam.ta.library.dao.connection.ConnectionClosable;
 import com.epam.ta.library.dao.exception.DaoException;
 import com.epam.ta.library.dao.factory.MySQLDao;
 import com.epam.ta.library.dao.util.UserUtil;
 
-public final class MySQLLoginDao implements LoginDao {
+public final class MySQLLoginDao implements LoginDao, ConnectionClosable {
 
 	private static MySQLLoginDao instance = null;
 
@@ -22,7 +24,6 @@ public final class MySQLLoginDao implements LoginDao {
 	private final static String SQL_SELECT_USER_BY_LOGIN = "select u.u_id, u.u_name, u.u_status, GROUP_CONCAT(r.r_authority) from users u join users_has_role using (u_id) join role r using (r_id) where and u.u_password=? GROUP BY u.u_id;";
 
 	private static final String ERROR_DB_OPERATION_FAILED = "Database operation failed.";
-	private static final String ERROR_CLOSING_CONNECTION = "Failed to close database connection.";
 	private static final String ERROR_USER_NOT_FOUND = "User not found.";
 
 	private final static int ZERO_AFFECTED_ROWS = 0;
@@ -58,14 +59,7 @@ public final class MySQLLoginDao implements LoginDao {
 				throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 			} finally {
-				if (stm != null || conn != null) {
-					try {
-						stm.close();
-						conn.close();
-					} catch (SQLException ex) {
-						throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-					}
-				}
+				closeConnection(stm, conn);
 			}
 		}
 		return false;
@@ -85,20 +79,13 @@ public final class MySQLLoginDao implements LoginDao {
 			rs = stm.executeQuery();
 			if (rs.next()) {
 				user = UserUtil.buildUserWithRoles(rs);
-			} 
+			}
 
 		} catch (SQLException ex) {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(rs, stm, conn);
 		}
 		return user;
 	}
@@ -123,14 +110,7 @@ public final class MySQLLoginDao implements LoginDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(rs, stm, conn);
 		}
 		return user;
 	}
@@ -153,14 +133,7 @@ public final class MySQLLoginDao implements LoginDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(rs, stm, conn);
 		}
 		return false;
 	}
@@ -184,14 +157,7 @@ public final class MySQLLoginDao implements LoginDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}
@@ -215,14 +181,7 @@ public final class MySQLLoginDao implements LoginDao {
 			throw new DaoException(ERROR_DB_OPERATION_FAILED, ex);
 
 		} finally {
-			if (stm != null || conn != null) {
-				try {
-					stm.close();
-					conn.close();
-				} catch (SQLException ex) {
-					throw new DaoException(ERROR_CLOSING_CONNECTION, ex);
-				}
-			}
+			closeConnection(stm, conn);
 		}
 		return false;
 	}

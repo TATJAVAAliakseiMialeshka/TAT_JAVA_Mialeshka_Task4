@@ -4,17 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Role implements Serializable{
+public class Role implements Serializable {
 
 	private static final long serialVersionUID = -4646483753573165723L;
-	
+
 	private Integer id;
 	private List<User> userList = new ArrayList<>();
 	private String name;
 	private Authority authority;
 
-	public enum Authority {ROLE_SUPERADMIN, ROLE_ADMIN, ROLE_USER};
-	
+	public enum Authority {
+		ROLE_SUPERADMIN, ROLE_ADMIN, ROLE_USER
+	};
+
 	public Integer getId() {
 		return id;
 	}
@@ -32,21 +34,15 @@ public class Role implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		if (null != id) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
 	public void setUserList(List<User> userList) {
-		if (null != userList) {
-			this.userList = userList;
-		}
+		this.userList = userList;
 	}
 
 	public void setName(String name) {
-		if (null != name && !name.isEmpty()) {
-			this.name = name;
-		}
+		this.name = name;
 	}
 
 	public void setAuthority(String authorityStr) {
@@ -101,7 +97,5 @@ public class Role implements Serializable{
 	public String toString() {
 		return "Role [id=" + id + ", name=" + name + ", authority=" + authority + "]";
 	}
-	
-	
 
 }

@@ -19,56 +19,57 @@ import com.epam.ta.library.service.util.ServiceUtil;
 public final class UserServiceImpl implements UserService {
 
 	private static final String NULL_PARAMETER = "Received null parameter";
-	
+
 	@Override
 	public boolean orderBook(Integer userId, Integer bookId) throws ServiceException {
 		if (!ServiceUtil.notNullCheck(userId, bookId)) {
 			throw new ServiceException(NULL_PARAMETER);
 		}
-		try{
+		try {
 			DaoFactory factory = DaoFactory.getDaoFactory(DBType.MYSQL);
-		if (null != factory) {
-			UserDao userDao = factory.getUserDao();
-			if (userDao.orderBook(userId, bookId)) {
-				return true;
+			if (null != factory) {
+				UserDao userDao = factory.getUserDao();
+				if (userDao.orderBook(userId, bookId)) {
+					return true;
+				}
 			}
+
+		} catch (DaoException e) {
+			throw new ServiceException(e);
 		}
 		return false;
-	} catch (DaoException e) {
-		throw new ServiceException(e);
 	}
-	}
-	
+
 	@Override
 	public boolean refuseOrderedBook(Integer userId, Integer bookId) throws ServiceException {
 		if (!ServiceUtil.notNullCheck(userId, bookId)) {
 			throw new ServiceException(NULL_PARAMETER);
 		}
-		try{
+		try {
 			DaoFactory factory = DaoFactory.getDaoFactory(DBType.MYSQL);
-		if (null != factory) {
-			UserDao userDao = factory.getUserDao();
-			if (userDao.refuseOrderedBook(userId, bookId)) {
-				return true;
+			if (null != factory) {
+				UserDao userDao = factory.getUserDao();
+				if (userDao.refuseOrderedBook(userId, bookId)) {
+					return true;
+				}
 			}
+			return false;
+		} catch (DaoException e) {
+			throw new ServiceException(e);
 		}
-		return false;
-	} catch (DaoException e) {
-		throw new ServiceException(e);
 	}
-	}
-	
+
 	@Override
 	public List<Subscription> viewHistoryCard(Integer userId) throws ServiceException {
 		List<Subscription> sbsList = null;
 		if (!ServiceUtil.notNullCheck(userId)) {
 			throw new ServiceException(NULL_PARAMETER);
 		}
-		try{
+		try {
 			DaoFactory factory = DaoFactory.getDaoFactory(DBType.MYSQL);
-		if (null != factory) {
-			UserDao userDao = factory.getUserDao();
-			sbsList = userDao.viewHistoryCard(userId);
+			if (null != factory) {
+				UserDao userDao = factory.getUserDao();
+				sbsList = userDao.viewHistoryCard(userId);
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e);
@@ -79,11 +80,11 @@ public final class UserServiceImpl implements UserService {
 	@Override
 	public List<Book> seeAllBooks() throws ServiceException {
 		List<Book> bookList = null;
-		try{
+		try {
 			DaoFactory factory = DaoFactory.getDaoFactory(DBType.MYSQL);
-		if (null != factory) {
-			BookDao bookDao = factory.getBookDao();
-			bookList = bookDao.getAllBooks();
+			if (null != factory) {
+				BookDao bookDao = factory.getBookDao();
+				bookList = bookDao.getAllBooks();
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e);
@@ -120,14 +121,14 @@ public final class UserServiceImpl implements UserService {
 			if (null != factory) {
 				UserDao userDao = factory.getUserDao();
 				password = Encryptor.encrypt(password);
-				oldPassword = Encryptor.encrypt(oldPassword); 
+				oldPassword = Encryptor.encrypt(oldPassword);
 				if (userDao.updateUser(userId, name, password, oldPassword)) {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 }

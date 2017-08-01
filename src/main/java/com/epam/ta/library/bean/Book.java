@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book implements Serializable{
+public class Book implements Serializable {
 
 	private static final long serialVersionUID = -8377263953465540921L;
-	
+
 	private Integer id;
 	private Integer year;
 	private Integer quantity;
@@ -54,55 +54,41 @@ public class Book implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		if (null != id) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
 	public void setYear(Integer year) {
-		if (null != year) {
-			this.year = year;
-		}
+		this.year = year;
 	}
 
 	public void setName(String name) {
-		if (null != name && !name.isEmpty()) {
-			this.name = name;
-		}
+		this.name = name;
 	}
 
 	public void setIsAvailable(String isAvailable) {
 
-		    for (BookIsAvailable status : BookIsAvailable.values()) {
-		        if (status.name().equals(isAvailable)) {
-		    		this.isAvailable = BookIsAvailable.valueOf(isAvailable);
-		    		break;
-		        }
-		    }
+		for (BookIsAvailable status : BookIsAvailable.values()) {
+			if (status.name().equals(isAvailable)) {
+				this.isAvailable = BookIsAvailable.valueOf(isAvailable);
+				break;
+			}
 		}
+	}
 
 	public void setAuthorList(List<String> authorList) {
-		if (null != authorList) {
-			this.authorList = authorList;
-		}
+		this.authorList = authorList;
 	}
 
 	public void setSubscriptionList(List<Subscription> subscriptionList) {
-		if (null != subscriptionList) {
-			this.subscriptionList = subscriptionList;
-		}
+		this.subscriptionList = subscriptionList;
 	}
 
 	public void setQuantity(Integer quantity) {
-		if (null != quantity) {
-			this.quantity = quantity;
-		}
+		this.quantity = quantity;
 	}
 
 	public void setDescription(String description) {
-		if (null != description && !description.isEmpty()) {
-			this.description = description;
-		}
+		this.description = description;
 	}
 
 	@Override
@@ -162,7 +148,5 @@ public class Book implements Serializable{
 		return "Book [id=" + id + ", year=" + year + ", quantity=" + quantity + ", name=" + name + ", description="
 				+ description + ", isAvailable=" + isAvailable + "]";
 	}
-
-
 
 }

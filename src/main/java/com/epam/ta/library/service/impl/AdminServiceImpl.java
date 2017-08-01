@@ -48,10 +48,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -67,10 +67,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -86,10 +86,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -105,10 +105,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -124,10 +124,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -143,10 +143,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -162,10 +162,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
@@ -181,16 +181,15 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
-	public boolean updateBook(Book book)
-			throws ServiceException {
-		
+	public boolean updateBook(Book book) throws ServiceException {
+
 		if (null == book) {
 			throw new ServiceException(NULL_PARAMETER);
 		}
@@ -202,10 +201,10 @@ public final class AdminServiceImpl implements AdminService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 }

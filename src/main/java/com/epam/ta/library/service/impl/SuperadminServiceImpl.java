@@ -12,24 +12,24 @@ import com.epam.ta.library.service.util.ServiceUtil;
 public final class SuperadminServiceImpl implements SuperadminService {
 
 	private static final String NULL_PARAMETER = "Received null parameter";
-	
+
 	@Override
 	public boolean deleteAdminRole(Integer userId) throws ServiceException {
 		if (!ServiceUtil.notNullCheck(userId)) {
 			throw new ServiceException(NULL_PARAMETER);
 		}
-		try{
+		try {
 			DaoFactory factory = DaoFactory.getDaoFactory(DBType.MYSQL);
-		if (null != factory) {
-			AdminDao adminDao = factory.getAdminDao();
-			if (adminDao.deleteUserRole(userId, Authority.ROLE_ADMIN.toString())) {
-				return true;
+			if (null != factory) {
+				AdminDao adminDao = factory.getAdminDao();
+				if (adminDao.deleteUserRole(userId, Authority.ROLE_ADMIN.toString())) {
+					return true;
+				}
 			}
+		} catch (DaoException e) {
+			throw new ServiceException(e);
 		}
 		return false;
-	} catch (DaoException e) {
-		throw new ServiceException(e);
-	}
 	}
 
 }

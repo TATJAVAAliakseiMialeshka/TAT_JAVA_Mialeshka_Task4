@@ -28,10 +28,10 @@ public final class LoginServiceImpl implements LoginService {
 					return true;
 				}
 			}
-			return false;
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override
